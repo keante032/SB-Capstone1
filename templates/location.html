@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% if location.name %}
+{% block title %}{{ location.name }}{% endblock %}
+{% else %}
+{% block title %}{{ location.office }}-{{ location.grid_x }}-{{ location.grid_y }}{% endblock %}
+{% endif %}
+
+{% block content %}
+
+{% if location.name %}
+<h2>{{ location.name }}</h2>
+{% else %}
+<h2>{{ location.office }}-{{ location.grid_x }}-{{ location.grid_y }}</h2>
+{% endif %}
+
+<p>Fetching and displaying weather info still to be implemented. Also thinking about adding a form so an authenticated
+    user can edit the name of the location (which then will cause that name to display instead of the office-X-Y).</p>
+
+
+{% endblock %}

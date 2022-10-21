@@ -91,3 +91,13 @@ def login_user():
             form.email.errors = ['Email or password is incorrect.']
 
     return render_template('login.html', form=form)
+
+
+@app.route('/locs/<str:office>-<int:grid_x>-<int:grid_y>')
+def location_page():
+    '''Page showing weather info for a particular location.'''
+
+    this_loc = Location.query.filter(and_(
+        Location.office == office, Location.grid_x == grid_x, Location.grid_y == grid_y)).first()
+
+    return render_template('location.html', location=this_loc)
