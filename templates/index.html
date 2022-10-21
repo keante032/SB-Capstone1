@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+
+<h1>Your Weather</h1>
+
+<form>
+    <div class="input-group input-group-lg mb-3">
+        <input type="search" class="form-control" id="location-search" name="location-search"
+            placeholder="latitude, longitude" aria-label="latitude, longitude" aria-describedby="button-addon2">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+    </div>
+</form>
+
+{% endblock %}
