@@ -6,12 +6,23 @@
 
 <h1>Your Weather</h1>
 
-<form>
-    <div class="input-group input-group-lg mb-3">
-        <input type="search" class="form-control" id="location-search" name="location-search"
-            placeholder="latitude, longitude" aria-label="latitude, longitude" aria-describedby="button-addon2">
-        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-    </div>
+<form id="loc-search-form" method="GET">
+    {{ form.hidden_tag() }}
+
+    {% for field in form if field.widget.input_type != 'hidden'%}
+
+    <p>
+        {{ field.label }}
+        {{ field }}
+
+        {% for error in field.errors %}
+        {{ error }}
+        {% endfor %}
+    </p>
+
+    {% endfor %}
+
+    <button class="btn btn-sm btn-primary" type="submit">Search</button>
 </form>
 
 {% endblock %}
