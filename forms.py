@@ -26,3 +26,9 @@ class LocationSearchForm(FlaskForm):
                           InputRequired(), NumberRange(min=-90, max=90)])
     longitude = FloatField('Longitude', validators=[
                            InputRequired(), NumberRange(min=-180, max=180)])
+
+
+class LocationNameForm(FlaskForm):
+    '''Form for changing the name of a location.'''
+
+    loc_name = StringField('Location Name')

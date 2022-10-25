@@ -1,21 +1,38 @@
 {% extends 'base.html' %}
 
-{% if location.name %}
-{% block title %}{{ location.name }}{% endblock %}
-{% else %}
-{% block title %}{{ location.office }}-{{ location.grid_x }}-{{ location.grid_y }}{% endblock %}
-{% endif %}
+
+{% block title %}
+{% if loc.name %}{{ loc.name }}
+{% else %}{{ loc.office }}-{{ loc.grid_x }}-{{loc.grid_y }}
+{% endif %}{% endblock %}
 
 {% block content %}
 
-{% if location.name %}
-<h2>{{ location.name }}</h2>
-{% else %}
-<h2>{{ location.office }}-{{ location.grid_x }}-{{ location.grid_y }}</h2>
-{% endif %}
+<h2>{% if loc.name %}{{ loc.name }}
+    {% else %}{{ loc.office }}-{{ loc.grid_x }}-{{ loc.grid_y }}
+    {% endif %}</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
 
-<p>Fetching and displaying weather info still to be implemented. Also thinking about adding a form so an authenticated
-    user can edit the name of the location (which then will cause that name to display instead of the office-X-Y).</p>
+    {% for field in form if field.widget.input_type != 'hidden'%}
 
+    <p>
+        {{ field.label }}
+        {{ field }}
+
+        {% for error in field.errors %}
+        {{ error }}
+        {% endfor %}
+    </p>
+
+    {% endfor %}
+
+    <button class="btn btn-sm btn-primary" type="submit">Submit name change</button>
+</form>
+
+{% for period in forecasts %}
+<h5>{{ period['name'] }}</h5>
+<p><img src={{ period['icon'] }}>{{ period['detailedForecast'] }}</p>
+{% endfor %}
 
 {% endblock %}
