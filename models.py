@@ -28,7 +28,9 @@ class User(db.Model):
         hashed_utf8 = hashed.decode('utf8')
 
         # return instance of user w/ email and hashed pwd
-        return cls(email=email, password=hashed_utf8)
+        new_user = cls(email=email, password=hashed_utf8)
+        db.session.add(new_user)
+        return new_user
 
     @classmethod
     def authenticate(cls, email, password):
@@ -47,15 +49,14 @@ class User(db.Model):
 
 
 class Location(db.Model):
-    """Weather.gov API grid location."""
+    """A location for which weather data has been fetched."""
 
     __tablename__ = 'locations'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.Text, nullable=True)
-    office = db.Column(db.String(3), nullable=False)
-    grid_x = db.Column(db.Integer, nullable=False)
-    grid_y = db.Column(db.Integer, nullable=False)
+    address = db.Column(db.Text, nullable=True)
+    lat = db.Column(db.Float, nullable=False)
+    long = db.Column(db.Float, nullable=False)
 
 
 class Favorite(db.Model):

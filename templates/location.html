@@ -2,37 +2,62 @@
 
 
 {% block title %}
-{% if loc.name %}{{ loc.name }}
-{% else %}{{ loc.office }}-{{ loc.grid_x }}-{{loc.grid_y }}
-{% endif %}{% endblock %}
+{{ loc_name }}
+{% endblock %}
 
 {% block content %}
 
-<h2>{% if loc.name %}{{ loc.name }}
-    {% else %}{{ loc.office }}-{{ loc.grid_x }}-{{ loc.grid_y }}
-    {% endif %}</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-
-    {% for field in form if field.widget.input_type != 'hidden'%}
-
-    <p>
-        {{ field.label }}
-        {{ field }}
-
-        {% for error in field.errors %}
-        {{ error }}
-        {% endfor %}
-    </p>
-
+<div class="row">
+    <div class="col">
+        <h2>{{ loc_name }}</h2>
+    </div>
+    <div class="col-auto">
+        {% if g.user %}
+        {% if loc in g.user.favorites %}
+        <a class="btn btn-danger" href="/update-fav-{{loc.id}}">Remove from favorites</a>
+        {% else %}
+        <a class="btn btn-primary" href="/update-fav-{{loc.id}}">Add to favorites</a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% if data['alerts']|length > 0 %}
+<div class="row">
+    <div class="col">
+        <h3 class="text-danger">Alerts:</h3>
+    </div>
+</div>
+<div class="row row-cols-1 row-cols-lg-2">
+    {% for alert in data['alerts'] %}
+    <div class="col p-1">
+        <div class="border border-danger rounded p-1 w-100 h-100">
+            <h4>{{ alert['event'] }}</h4>
+            <p>{{ alert['headline'] }}</p>
+            <p>{{ alert['description'] }}</p>
+        </div>
+    </div>
     {% endfor %}
-
-    <button class="btn btn-sm btn-primary" type="submit">Submit name change</button>
-</form>
-
-{% for period in forecasts %}
-<h5>{{ period['name'] }}</h5>
-<p><img src={{ period['icon'] }}>{{ period['detailedForecast'] }}</p>
-{% endfor %}
+</div>
+{% endif %}
+<div class="row">
+    <div class="col">
+        <h3>Forecast:</h3>
+    </div>
+</div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+    {% for day in data['days'] %}
+    <div class="col p-1">
+        <div class="border border-secondary rounded p-1 w-100 h-100">
+            <h5>{{ day['datetime'] }}</h5>
+            <ul>
+                <li><b>High:</b> {{ day['tempmax'] }}&deg;</li>
+                <li><b>Low:</b> {{ day['tempmin'] }}&deg;</li>
+                <li><b>Precipitation Chance:</b> {{ day['precipprob'] }}%</li>
+                <li>{{ day['description'] }}</li>
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

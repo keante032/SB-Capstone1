@@ -6,26 +6,46 @@
 
 <h1>Your Weather</h1>
 
-<p>For now, use another tool, like <a href="https://www.gps-coordinates.net/">gps-coordinates.net</a>, if you don't know
-    the latitude and longitude for a location.</p>
+<div class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <p>Search with a <i>latitude,longitude</i> pair or a city name or an address.</p>
+            </div>
+        </div>
+        <form class="row" method="POST">
+            {{ loc_form.hidden_tag() }}
 
-<form id="loc-search-form" method="POST">
-    {{ form.hidden_tag() }}
+            <div class="form-group col">
+                {{ loc_form.location(class_="form-control", placeholder="Location") }}
 
-    {% for field in form if field.widget.input_type != 'hidden'%}
-
-    <p>
-        {{ field.label }}
-        {{ field }}
-
-        {% for error in field.errors %}
-        {{ error }}
-        {% endfor %}
-    </p>
-
-    {% endfor %}
-
-    <button class="btn btn-sm btn-primary" type="submit">Search</button>
-</form>
-
+                {% for error in loc_form.location.errors %}
+                <small class="form-text text-danger">
+                    {{ error }}
+                </small>
+                {% endfor %}
+            </div>
+            <div class="col-auto">
+                {{ loc_form.search(class_="btn btn-success") }}
+            </div>
+        </form>
+    </div>
+    {% if g.user %}
+    <div class="col-1"></div>
+    <div class="col-3">
+        <h3>Your Favorites</h3>
+        {% if g.user.favorites|length > 0 %}
+        <div class="list-group list-group-flush">
+            {% for fav in g.user.favorites %}
+            {% if fav.address %}
+            <a href="/locs/{{ fav.id }}" class="list-group-item">{{ fav.address }}</a>
+            {% else %}
+            <a href="/locs/{{ fav.id }}" class="list-group-item">{{ fav.lat }}, {{ fav.long }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

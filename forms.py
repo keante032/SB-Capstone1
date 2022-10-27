@@ -1,8 +1,8 @@
 """Forms for weather app."""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, FloatField
-from wtforms.validators import InputRequired, Email, NumberRange
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Email
 
 
 class RegisterForm(FlaskForm):
@@ -10,6 +10,7 @@ class RegisterForm(FlaskForm):
 
     email = StringField('Email Address', validators=[Email(), InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
+    submit = SubmitField('Submit')
 
 
 class LoginForm(FlaskForm):
@@ -17,18 +18,11 @@ class LoginForm(FlaskForm):
 
     email = StringField('Email Address', validators=[Email(), InputRequired()])
     password = PasswordField('Password', validators=[InputRequired()])
+    submit = SubmitField('Submit')
 
 
 class LocationSearchForm(FlaskForm):
     '''Form for searching a location to get weather info.'''
 
-    latitude = FloatField('Latitude', validators=[
-                          InputRequired(), NumberRange(min=-90, max=90)])
-    longitude = FloatField('Longitude', validators=[
-                           InputRequired(), NumberRange(min=-180, max=180)])
-
-
-class LocationNameForm(FlaskForm):
-    '''Form for changing the name of a location.'''
-
-    loc_name = StringField('Location Name')
+    location = StringField('Location')
+    search = SubmitField('Search')
