@@ -7,6 +7,12 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 
 
+def connect_db(app):
+    """Connect this database to Flask app (function is called from app.py)."""
+
+    db.app = app
+    db.init_app(app)
+
 class User(db.Model):
     """User in the system."""
 
@@ -67,10 +73,3 @@ class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
-
-
-def connect_db(app):
-    """Connect this database to Flask app (function is called from app.py)."""
-
-    db.app = app
-    db.init_app(app)
