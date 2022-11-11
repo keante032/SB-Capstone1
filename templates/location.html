@@ -59,5 +59,12 @@
     </div>
     {% endfor %}
 </div>
+<div class="row">
+    <div class="col">
+        <iframe
+            src="https://www.rainviewer.com/map.html?loc={{ loc.lat }},{{ loc.long }},8&oFa=1&oC=0&oU=0&oCS=1&oF=0&oAP=0&c=0&o=90&lm=1&layer=radar&sm=0&sn=1&hu=0"
+            width="100%" frameborder="0" style="border:0;height:50vh;" allowfullscreen></iframe>
+    </div>
+</div>
 
 {% endblock %}
