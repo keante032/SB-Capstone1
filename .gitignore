@@ -2,3 +2,5 @@ venv/
 capstone_secrets.py
 __pycache__/
 tests/__pycache__/
+.venv/
+.vscode/
