@@ -2,19 +2,20 @@ from flask import Flask, redirect, render_template, flash, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 import requests
-from capstone_secrets import FLASK_KEY, API_KEY
-from models import db, connect_db, User, Location, Favorite
+import os
+from models import db, connect_db, User, Location
 from forms import RegisterForm, LoginForm, LocationSearchForm
 from datetime import datetime as dt
 
 CURR_USER_KEY = "curr_user"
+API_KEY = os.environ.get("API_KEY")
 
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///weather"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = FLASK_KEY
+app.config["SECRET_KEY"] = os.environ.get("FLASK_KEY", "default_secret_key")
 app.config["DEBUG_TB_INTERCEPT_REDIRECTS"] = True
 
 connect_db(app)
