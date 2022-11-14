@@ -17,7 +17,8 @@
             {{ loc_form.hidden_tag() }}
 
             <div class="form-group col">
-                {{ loc_form.location(class_="form-control", placeholder="Location") }}
+                {{ loc_form.location(class_="form-control", placeholder="38.8974,-77.0365 | 1600 Pennsylvania Avenue NW,
+                Washington, DC 20500") }}
 
                 {% for error in loc_form.location.errors %}
                 <small class="form-text text-danger">

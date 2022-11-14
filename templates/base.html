@@ -19,7 +19,7 @@
             <form class="d-flex" id="loc-search-form" method="POST">
                 {{ loc_form.hidden_tag() }}
                 <div class="input-group">
-                    {{ loc_form.location(class_="form-control", placeholder="Location") }}
+                    {{ loc_form.location(class_="form-control", placeholder="{{ loc_name }}") }}
                     {{ loc_form.search(class_="btn btn-success") }}
                 </div>
             </form>
