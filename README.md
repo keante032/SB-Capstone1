@@ -14,14 +14,14 @@ The search bar in the center of the homepage also appears in the navbar for any 
 If a user is not logged in, then the register and login buttons are always available in the navbar. If a user is logged in, then the logout button is available in the navbar.
 
 **Tech Stack**
-HTML
-Bootstrap
-Python
-Flask
+HTML;
+Bootstrap;
+Python;
+Flask;
 SQLAlchemy
 
 **Additional Good-To-Haves Not Yet Implemented**
-add some color for a nicer appearance
-better alignment--give date same margin as the bullet points
-add link on navbar called "Favorites" that takes you back to the homepage, which displays favorites on the right side
+add some color for a nicer appearance;
+better alignment--give date same margin as the bullet points;
+add link on navbar called "Favorites" that takes you back to the homepage, which displays favorites on the right side;
 more options beyond the default current day + 5 days of forecast (longer forecast like for next week, maybe also historical data)
