@@ -217,7 +217,13 @@ def update_fav(loc_id):
 
     this_loc = Location.query.get_or_404(loc_id)
 
-    g.user.favorites.append(this_loc)
+    if this_loc in g.user.favorites:
+        g.user.favorites.remove(this_loc)
+        flash("Removed from favorites.")
+    else:
+        g.user.favorites.append(this_loc)
+        flash("Added to favorites.")
+
     db.session.commit()
 
     return redirect(f"/locs/{loc_id}")
