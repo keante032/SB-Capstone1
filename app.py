@@ -203,6 +203,7 @@ def location_page(loc_id):
                 pass
 
         current = data.get("currentConditions") or {}
+        data["num_days"] = len(data.get("days", []))
 
         loc_name = (
             this_loc.address if this_loc.address else f"{this_loc.lat}, {this_loc.long}"
