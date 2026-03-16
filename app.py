@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 import requests
 import os
 from models import db, connect_db, User, Location
+from helper import degrees_to_compass_16
 from forms import RegisterForm, LoginForm, LocationSearchForm
 from datetime import datetime as dt
 
@@ -203,6 +204,8 @@ def location_page(loc_id):
                 pass
 
         current = data.get("currentConditions") or {}
+        current["winddir_degrees"] = current.get("winddir")
+        current["winddir"] = degrees_to_compass_16(current.get("winddir"))
         data["num_days"] = len(data.get("days", []))
 
         loc_name = (
