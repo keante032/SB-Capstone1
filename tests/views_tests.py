@@ -11,15 +11,15 @@ from app import app, CURR_USER_KEY
 from models import db, connect_db, User, Location, Favorite
 
 # different database for tests
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///weather-test"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///weather-test"
 # don't clutter tests with SQL
-app.config['SQLALCHEMY_ECHO'] = False
+app.config["SQLALCHEMY_ECHO"] = False
 # Make Flask errors be real errors, rather than HTML pages with error info
-app.config['TESTING'] = True
+app.config["TESTING"] = True
 
 
 # Don't have WTForms use CSRF at all, since it's a pain to test
-app.config['WTF_CSRF_ENABLED'] = False
+app.config["WTF_CSRF_ENABLED"] = False
 
 
 class ViewTestCase(TestCase):
@@ -71,7 +71,10 @@ class ViewTestCase(TestCase):
             resp = c.get("/")
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("Search with a <i>latitude,longitude</i> pair or a city name or an address.", str(resp.data))
+            self.assertIn(
+                "Search with a <i>latitude,longitude</i> pair or a city name or an address.",
+                str(resp.data),
+            )
 
     def test_location(self):
         with self.client as c:
@@ -99,10 +102,26 @@ class ViewTestCase(TestCase):
         with self.client as c:
             with c.session_transaction() as sess:
                 sess[CURR_USER_KEY] = self.uid1
-            
+
             resp = c.get("/")
 
             self.assertEqual(resp.status_code, 200)
 
             self.assertIn("<h3>Your Favorites</h3>", str(resp.data))
+            self.assertIn("Test1", str(resp.data))
+
+    def test_favorites_page_requires_login(self):
+        with self.client as c:
+            resp = c.get("/favorites")
+            self.assertEqual(resp.status_code, 302)
+            self.assertIn("/login", resp.location)
+
+    def test_favorites_page_shows_entries(self):
+        self.setup_favorites()
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess[CURR_USER_KEY] = self.uid1
+            resp = c.get("/favorites")
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Your Favorites", str(resp.data))
             self.assertIn("Test1", str(resp.data))

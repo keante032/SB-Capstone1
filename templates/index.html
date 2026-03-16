@@ -1,52 +1,41 @@
-{% extends 'base.html' %}
-
-{% block title %}Homepage{% endblock %}
-
-{% block content %}
-
-
-
-<div class="row">
-    <div class="col">
-        <div class="row">
-            <div class="col">
-                <p>Search with a <i>latitude,longitude</i> pair or a city name or an address.</p>
-            </div>
-        </div>
-        <form class="row" method="POST">
-            {{ loc_form.hidden_tag() }}
-
-            <div class="form-group col">
-                {{ loc_form.location(class_="form-control", placeholder="38.8974,-77.0365 | 1600 Pennsylvania Avenue NW,
-                Washington, DC 20500") }}
-
-                {% for error in loc_form.location.errors %}
-                <small class="form-text text-danger">
-                    {{ error }}
-                </small>
-                {% endfor %}
-            </div>
-            <div class="col-auto">
-                {{ loc_form.search(class_="btn btn-success") }}
-            </div>
-        </form>
-    </div>
-    {% if g.user %}
-    <div class="col-1"></div>
-    <div class="col-3">
-        <h3>Your Favorites</h3>
-        {% if g.user.favorites|length > 0 %}
-        <div class="list-group list-group-flush">
-            {% for fav in g.user.favorites %}
-            {% if fav.address %}
-            <a href="/locs/{{ fav.id }}" class="list-group-item">{{ fav.address }}</a>
-            {% else %}
-            <a href="/locs/{{ fav.id }}" class="list-group-item">{{ fav.lat }}, {{ fav.long }}</a>
-            {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-    {% endif %}
+{% extends 'base.html' %} {% block title %}Homepage{% endblock %} {% block content %}
+<div class="row justify-content-center">
+	<div class="col-lg-8">
+		<div class="card shadow-sm mb-4">
+			<div class="card-body">
+				<h1 class="card-title">Welcome to Your Weather</h1>
+				<p class="card-text">Search by city name, address, or latitude/longitude to get quick weather details and radar.</p>
+				<form class="row g-2" method="POST">
+					{{ loc_form.hidden_tag() }}
+					<div class="col-9">
+						{{ loc_form.location(class_="form-control", placeholder="38.8974,-77.0365 or 1600 Pennsylvania Avenue NW, Washington, DC") }} {% for error in loc_form.location.errors %}
+						<small class="form-text text-danger">{{ error }}</small>
+						{% endfor %}
+					</div>
+					<div class="col">{{ loc_form.search(class_="btn btn-success w-100") }}</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-{% endblock %}
+
+{% if g.user %}
+<div class="row">
+	<div class="col-lg-4">
+		<div class="card border-info mb-4">
+			<div class="card-body">
+				<h5 class="card-title">Your Favorites</h5>
+				{% if g.user.favorites|length > 0 %}
+				<div class="list-group list-group-flush">
+					{% for fav in g.user.favorites %}
+					<a href="/locs/{{ fav.id }}" class="list-group-item list-group-item-action py-1"> {% if fav.address %}{{ fav.address }}{% else %}{{ fav.lat }}, {{ fav.long }}{% endif %} </a>
+					{% endfor %}
+				</div>
+				{% else %}
+				<p class="mb-0">No favorites yet. Add one from a location page.</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %} {% endblock %}

@@ -189,40 +189,46 @@ def location_page(loc_id):
         )
         data = resp.json()
 
-        for day in data["days"]:
-            date = dt.strptime(day["datetime"], "%Y-%m-%d")
-            day["datetime"] = date.strftime("%b %d, %Y - %A")
+        # Add readable dates
+        for day in data.get("days", []):
+            try:
+                date = dt.strptime(day["datetime"], "%Y-%m-%d")
+                day["datetime"] = date.strftime("%b %d, %Y - %A")
+            except Exception:
+                pass
 
-        if this_loc.address:
-            loc_name = this_loc.address
-        else:
-            loc_name = f"{this_loc.lat}, {this_loc.long}"
+        current = data.get("currentConditions") or {}
+
+        loc_name = (
+            this_loc.address if this_loc.address else f"{this_loc.lat}, {this_loc.long}"
+        )
 
         return render_template(
             "location.html",
             data=data,
+            current=current,
             loc=this_loc,
             loc_name=loc_name,
             loc_form=loc_form,
         )
 
 
-@app.route("/update-fav-<int:loc_id>")
+@app.route("/update-fav/<int:loc_id>", methods=["POST"])
 def update_fav(loc_id):
     """Add or remove this location from user's favorites."""
 
     if not g.user:
-        flash("Must be logged in to use Favorites feature.")
+        flash("Must be logged in to use Favorites feature.", "danger")
         return redirect(f"/locs/{loc_id}")
 
     this_loc = Location.query.get_or_404(loc_id)
 
     if this_loc in g.user.favorites:
         g.user.favorites.remove(this_loc)
-        flash("Removed from favorites.")
+        flash("Removed from favorites.", "info")
     else:
         g.user.favorites.append(this_loc)
-        flash("Added to favorites.")
+        flash("Added to favorites.", "success")
 
     db.session.commit()
 

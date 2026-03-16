@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block title %}Favorites{% endblock %} {% block content %}
+<div class="row">
+	<div class="col">
+		<h1>Your Favorites</h1>
+		<p>Click a location to view its forecast.</p>
+		{% if g.user.favorites|length > 0 %}
+		<div class="list-group">
+			{% for fav in g.user.favorites %}
+			<a class="list-group-item list-group-item-action" href="/locs/{{ fav.id }}"> {% if fav.address %} {{ fav.address }} {% else %} {{ fav.lat }}, {{ fav.long }} {% endif %} </a>
+			{% endfor %}
+		</div>
+		{% else %}
+		<p>You have no saved favorites yet. Search for a location and add it.</p>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

@@ -1,70 +1,93 @@
-{% extends 'base.html' %}
-
-
-{% block title %}
-{{ loc_name }}
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %} {{ loc_name }} {% endblock %} {% block content %}
+<div class="row align-items-center mb-3">
+	<div class="col-md-8">
+		<h2 class="mb-0">{{ loc_name }}</h2>
+		<p class="text-muted mb-0">{{ loc.lat }}, {{ loc.long }}</p>
+	</div>
+	<div class="col-md-4 text-md-end mt-2 mt-md-0">
+		{% if g.user %}
+		<form method="POST" action="/update-fav/{{ loc.id }}">
+			{% if loc in g.user.favorites %}
+			<button class="btn btn-danger" type="submit">Remove from favorites</button>
+			{% else %}
+			<button class="btn btn-primary" type="submit">Save as favorite</button>
+			{% endif %}
+		</form>
+		{% endif %}
+	</div>
+</div>
 
 <div class="row">
-    <div class="col">
-        <h2>{{ loc_name }}</h2>
-    </div>
-    <div class="col-auto">
-        {% if g.user %}
-        {% if loc in g.user.favorites %}
-        <a class="btn btn-danger" href="/update-fav-{{loc.id}}">Remove from favorites</a>
-        {% else %}
-        <a class="btn btn-primary" href="/update-fav-{{loc.id}}">Add to favorites</a>
-        {% endif %}
-        {% endif %}
-    </div>
+	<div class="col-md-6 mb-3">
+		<div class="card border-primary h-100">
+			<div class="card-body">
+				<h5 class="card-title">Current Conditions</h5>
+				<p class="mb-1"><strong>Temp:</strong> {{ current.temp | default('N/A') }}°</p>
+				<p class="mb-1"><strong>Feels like:</strong> {{ current.feelslike | default('N/A') }}°</p>
+				<p class="mb-1"><strong>Humidity:</strong> {{ current.humidity | default('N/A') }}%</p>
+				<p class="mb-1"><strong>Wind:</strong> {{ current.windspeed | default('N/A') }} mph {{ current.winddir | default('') }}</p>
+				<p class="mb-0"><strong>Conditions:</strong> {{ current.conditions | default('N/A') }}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 mb-3">
+		<div class="card border-info h-100">
+			<div class="card-body">
+				<h5 class="card-title">Forecast Overview</h5>
+				<p class="mb-1"><strong>Days:</strong> {{ data.days | length }} day(s)</p>
+				<p class="mb-1"><strong>Sunrise:</strong> {{ data.currentConditions.sunrise | default('N/A') }}</p>
+				<p class="mb-1"><strong>Sunset:</strong> {{ data.currentConditions.sunset | default('N/A') }}</p>
+				<p class="mb-0"><strong>UV Index:</strong> {{ data.currentConditions.uvindex | default('N/A') }}</p>
+			</div>
+		</div>
+	</div>
 </div>
-{% if data['alerts']|length > 0 %}
-<div class="row">
-    <div class="col">
-        <h3 class="text-danger">Alerts:</h3>
-    </div>
-</div>
-<div class="row row-cols-1 row-cols-lg-2">
-    {% for alert in data['alerts'] %}
-    <div class="col p-1">
-        <div class="border border-danger rounded p-1 w-100 h-100">
-            <h4>{{ alert['event'] }}</h4>
-            <p>{{ alert['headline'] }}</p>
-            <p>{{ alert['description'] }}</p>
-        </div>
-    </div>
-    {% endfor %}
+
+{% if data.alerts %}
+<div class="row mb-3">
+	<div class="col">
+		<div class="card border-danger">
+			<div class="card-body">
+				<h5 class="card-title text-danger">Weather Alerts</h5>
+				{% for alert in data.alerts %}
+				<div class="mb-2">
+					<h6 class="mb-1">{{ alert.event }}</h6>
+					<p class="mb-0"><strong>{{ alert.headline }}</strong></p>
+					<small>{{ alert.description }}</small>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 </div>
 {% endif %}
+
 <div class="row">
-    <div class="col">
-        <h3>Forecast:</h3>
-    </div>
+	<div class="col">
+		<h4>5-Day Forecast</h4>
+	</div>
 </div>
-<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
-    {% for day in data['days'] %}
-    <div class="col p-1">
-        <div class="border border-secondary rounded p-1 w-100 h-100">
-            <h5>{{ day['datetime'] }}</h5>
-            <ul>
-                <li><b>High:</b> {{ day['tempmax'] }}&deg;</li>
-                <li><b>Low:</b> {{ day['tempmin'] }}&deg;</li>
-                <li><b>Precipitation Chance:</b> {{ day['precipprob'] }}%</li>
-                <li>{{ day['description'] }}</li>
-            </ul>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-<div class="row">
-    <div class="col">
-        <iframe
-            src="https://www.rainviewer.com/map.html?loc={{ loc.lat }},{{ loc.long }},8&oFa=1&oC=0&oU=0&oCS=1&oF=0&oAP=0&c=0&o=90&lm=1&layer=radar&sm=0&sn=1&hu=0"
-            width="100%" frameborder="0" style="border:0;height:50vh;" allowfullscreen></iframe>
-    </div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2 mb-3">
+	{% for day in data.days %}
+	<div class="col">
+		<div class="card h-100 border-secondary">
+			<div class="card-body">
+				<h5 class="card-title">{{ day.datetime }}</h5>
+				<p class="mb-1"><strong>High:</strong> {{ day.tempmax }}°</p>
+				<p class="mb-1"><strong>Low:</strong> {{ day.tempmin }}°</p>
+				<p class="mb-1"><strong>Precip:</strong> {{ day.precipprob }}%</p>
+				<p class="mb-0">{{ day.description }}</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
 </div>
 
+<div class="row mt-3">
+	<div class="col">
+		<div class="ratio ratio-16x9">
+			<iframe src="https://www.rainviewer.com/map.html?loc={{ loc.lat }},{{ loc.long }},8&oFa=1&oC=0&oU=0&oCS=1&oF=0&oAP=0&c=0&o=90&lm=1&layer=radar&sm=0&sn=1&hu=0" allowfullscreen></iframe>
+		</div>
+	</div>
+</div>
 {% endblock %}
