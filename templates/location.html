@@ -35,9 +35,9 @@
 			<div class="card-body">
 				<h5 class="card-title">Forecast Overview</h5>
 				<p class="mb-1"><strong>Days:</strong> {{ data.days | length }} day(s)</p>
-				<p class="mb-1"><strong>Sunrise:</strong> {{ data.currentConditions.sunrise | default('N/A') }}</p>
-				<p class="mb-1"><strong>Sunset:</strong> {{ data.currentConditions.sunset | default('N/A') }}</p>
-				<p class="mb-0"><strong>UV Index:</strong> {{ data.currentConditions.uvindex | default('N/A') }}</p>
+				<p class="mb-1"><strong>Sunrise:</strong> {{ current.sunrise | default('N/A') }}</p>
+				<p class="mb-1"><strong>Sunset:</strong> {{ current.sunset | default('N/A') }}</p>
+				<p class="mb-0"><strong>UV Index:</strong> {{ current.uvindex | default('N/A') }}</p>
 			</div>
 		</div>
 	</div>
