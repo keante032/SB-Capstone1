@@ -26,15 +26,7 @@
 				<p class="mb-1"><strong>Feels like:</strong> {{ current.feelslike | default('N/A') }}°</p>
 				<p class="mb-1"><strong>Humidity:</strong> {{ current.humidity | default('N/A') }}%</p>
 				<p class="mb-1"><strong>Wind:</strong> {{ current.windspeed | default('N/A') }} mph {{ current.winddir | default('') }}</p>
-				<p class="mb-0"><strong>Conditions:</strong> {{ current.conditions | default('N/A') }}</p>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-6 mb-3">
-		<div class="card border-info h-100">
-			<div class="card-body">
-				<h5 class="card-title">Forecast Overview</h5>
-				<p class="mb-1"><strong>Days:</strong> {{ data.days | length }} day(s)</p>
+				<p class="mb-1"><strong>Conditions:</strong> {{ current.conditions | default('N/A') }}</p>
 				<p class="mb-1"><strong>Sunrise:</strong> {{ current.sunrise | default('N/A') }}</p>
 				<p class="mb-1"><strong>Sunset:</strong> {{ current.sunset | default('N/A') }}</p>
 				<p class="mb-0"><strong>UV Index:</strong> {{ current.uvindex | default('N/A') }}</p>

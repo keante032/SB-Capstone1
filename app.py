@@ -55,7 +55,7 @@ def do_loc_search(loc_form):
     location = loc_form.location.data
 
     resp = requests.get(
-        f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{location}/today",
+        f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{location}",
         params={"include": "", "key": API_KEY},
     )
     data = resp.json()
@@ -184,8 +184,13 @@ def location_page(loc_id):
 
     else:
         resp = requests.get(
-            f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{this_loc.lat},{this_loc.long}/next5days",
-            params={"include": "fcst,days,alerts", "key": API_KEY},
+            f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{this_loc.lat},{this_loc.long}",
+            params={
+                "unitGroup": "us",
+                "include": "days,current,alerts",
+                "key": API_KEY,
+                "contentType": "json",
+            },
         )
         data = resp.json()
 
